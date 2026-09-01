@@ -15,15 +15,35 @@ const minute = second * 60;
 const hour = minute * 60;
 const day = hour * 24;
 
-// Countdown = 9 days from when the page loads
-let countDown = new Date().getTime() + (9 * day);
+// Exactly 9 days from page load
+let countDown = Date.now() + (9 * day);
 
 let x = setInterval(function () {
 
-  let now = new Date().getTime();
+  let now = Date.now();
   let distance = countDown - now;
 
-  // Calculate days, hours, minutes and seconds
+  // Stop negative values
+  if (distance <= 0) {
+
+    clearInterval(x);
+
+    document.getElementById('days').innerText = '0';
+    document.getElementById('hours').innerText = '0';
+    document.getElementById('minutes').innerText = '0';
+    document.getElementById('seconds').innerText = '0';
+
+    // Keep 0 visible for 5 seconds
+    setTimeout(function () {
+      timer.classList.add('d-none');
+      confetti();
+      _slideSatu();
+    }, 5000);
+
+    return;
+  }
+
+  // Calculate remaining time
   let days = Math.floor(distance / day);
   let hours = Math.floor((distance % day) / hour);
   let minutes = Math.floor((distance % hour) / minute);
@@ -34,29 +54,22 @@ let x = setInterval(function () {
   document.getElementById('minutes').innerText = minutes;
   document.getElementById('seconds').innerText = seconds;
 
-  // When countdown reaches zero
-  if (distance <= 0) {
-
-    clearInterval(x);
-
-    document.getElementById('days').innerText = '0';
-    document.getElementById('hours').innerText = '0';
-    document.getElementById('minutes').innerText = '0';
-    document.getElementById('seconds').innerText = '0';
-
-    // Keep 00:00:00 visible for 5 seconds
-    setTimeout(function () {
-
-      timer.classList.add('d-none');
-
-      confetti();
-
-      _slideSatu();
-
-    }, 5000);
-  }
-
 }, second);
+
+// Show countdown immediately
+let initialDistance = countDown - Date.now();
+
+document.getElementById('days').innerText =
+  Math.floor(initialDistance / day);
+
+document.getElementById('hours').innerText =
+  Math.floor((initialDistance % day) / hour);
+
+document.getElementById('minutes').innerText =
+  Math.floor((initialDistance % hour) / minute);
+
+document.getElementById('seconds').innerText =
+  Math.floor((initialDistance % minute) / second);
 
 const _slideSatu = function () {
   const tap = document.getElementById('tap');
