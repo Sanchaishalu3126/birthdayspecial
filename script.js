@@ -10,32 +10,53 @@ const content = document.getElementById('content');
 const footer = document.getElementsByTagName('footer')[0];
 const timer = document.getElementById('timer');
 
-const second = 1000,
-  minute = second * 60,
-  hour = minute * 60,
-  day = hour * 24;
-let countDown = new Date('Oct 22, 2023 00:00:00').getTime(),
-  x = setInterval(function () {
-    let now = new Date().getTime(),
-      distance = countDown - now;
-    // document.getElementById('days').innerText = Math.floor(distance / (day)),
-    document.getElementById('hours').innerText = Math.floor(distance / (hour)),
-      document.getElementById('minutes').innerText = Math.floor((distance % (hour)) / (minute)),
-      document.getElementById('seconds').innerText = Math.floor((distance % (minute)) / second);
+const second = 1000;
+const minute = second * 60;
+const hour = minute * 60;
+const day = hour * 24;
 
-    if (distance < 0) {
+// Countdown = 9 days from when the page loads
+let countDown = new Date().getTime() + (9 * day);
 
-  clearInterval(x);
+let x = setInterval(function () {
 
-  setTimeout(function () {
-    timer.classList.add('d-none');
-    confetti();
-    _slideSatu();
-  }, 5000);
+  let now = new Date().getTime();
+  let distance = countDown - now;
 
-}
+  // Calculate days, hours, minutes and seconds
+  let days = Math.floor(distance / day);
+  let hours = Math.floor((distance % day) / hour);
+  let minutes = Math.floor((distance % hour) / minute);
+  let seconds = Math.floor((distance % minute) / second);
 
-}, second)
+  document.getElementById('days').innerText = days;
+  document.getElementById('hours').innerText = hours;
+  document.getElementById('minutes').innerText = minutes;
+  document.getElementById('seconds').innerText = seconds;
+
+  // When countdown reaches zero
+  if (distance <= 0) {
+
+    clearInterval(x);
+
+    document.getElementById('days').innerText = '0';
+    document.getElementById('hours').innerText = '0';
+    document.getElementById('minutes').innerText = '0';
+    document.getElementById('seconds').innerText = '0';
+
+    // Keep 00:00:00 visible for 5 seconds
+    setTimeout(function () {
+
+      timer.classList.add('d-none');
+
+      confetti();
+
+      _slideSatu();
+
+    }, 5000);
+  }
+
+}, second);
 
 const _slideSatu = function () {
   const tap = document.getElementById('tap');
