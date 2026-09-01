@@ -25,13 +25,17 @@ let countDown = new Date('Oct 22, 2023 00:00:00').getTime(),
 
     if (distance < 0) {
 
-      timer.classList.add('d-none');
-      confetti();
-      clearInterval(x);
-      _slideSatu();
-    }
+  clearInterval(x);
 
-  }, second)
+  setTimeout(function () {
+    timer.classList.add('d-none');
+    confetti();
+    _slideSatu();
+  }, 5000);
+
+}
+
+}, second)
 
 const _slideSatu = function () {
   const tap = document.getElementById('tap');
